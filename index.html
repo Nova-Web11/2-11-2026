@@ -1,202 +1,671 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#050505">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050607">
 <title>ARCHIVO // 02-11-2026</title>
-
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;background:#050505;color:#ddd;
-  font-family:monospace;overflow-x:hidden;
+:root {
+  --green: #b8ffca;
+  --dim: #6c8b75;
+  --red: #ff4242;
+  --bg: #050607;
 }
-body:after{
-  content:"";position:fixed;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(
-    transparent 0px,transparent 3px,
-    #ffffff08 4px
-  );z-index:5;
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: #e7f0e9;
+  font-family: monospace;
 }
-header{
-  padding:18px;border-bottom:1px solid #292929;
-  color:#777;font-size:11px;letter-spacing:2px;
-  display:flex;justify-content:space-between;
+
+body { overflow: hidden; }
+
+.noise, .scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
 }
-#status{color:#a33}
-main{max-width:700px;margin:auto;padding:25px 18px 80px}
-h1{font-size:clamp(27px,7vw,46px);letter-spacing:2px}
-.muted{color:#666}
-.intro{padding:40px 0;text-align:center}
-.line{height:1px;background:#292929;margin:24px 0}
-.record{
-  border:1px solid #252525;margin:25px 0;
-  background:#090909;animation:appear .8s ease both;
+
+.noise {
+  opacity: .09;
+  z-index: 20;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
 }
-.record img{
-  display:block;width:100%;height:220px;
-  object-fit:cover;filter:grayscale(.55) contrast(1.15);
+
+.scanlines {
+  z-index: 19;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    rgba(255,255,255,.025) 1px,
+    transparent 3px
+  );
 }
-.info{padding:18px}
-.tag{color:#a33;font-size:10px;letter-spacing:2px}
-.date{font-size:23px;margin:12px 0}
-.description{color:#888;line-height:1.7;font-size:13px}
-footer{color:#444;font-size:10px;line-height:2}
-#ending{
-  display:none;position:fixed;inset:0;background:#000;
-  z-index:10;align-items:center;justify-content:center;
-  flex-direction:column;text-align:center;padding:25px;
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #28372d;
+  background: #050607d9;
+  z-index: 5;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--dim);
 }
-#ending.show{display:flex;animation:flash .4s}
-#error{font-size:clamp(27px,8vw,52px);color:#e5e5e5;
-  margin:20px 0;animation:glitch 1s infinite}
-#enddate{font-size:20px;letter-spacing:4px}
-#endnote{color:#8d2929;font-size:11px;line-height:2}
-button{
-  background:#080808;color:#888;border:1px solid #444;
-  padding:14px 18px;font-family:monospace;cursor:pointer;
+
+header b {
+  color: var(--green);
+  font-weight: 500;
 }
-@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes glitch{
-  0%,90%,100%{transform:translateX(0)}
-  92%{transform:translateX(3px)}
-  94%{transform:translateX(-4px)}
-  96%{transform:translateX(2px)}
+
+main {
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 64px 16px 34px;
 }
-@keyframes flash{0%{opacity:0}40%{opacity:.3}100%{opacity:1}}
+
+.panel {
+  width: min(760px, 100%);
+  border: 1px solid #314537;
+  background: linear-gradient(145deg,#0b100d,#050706 70%);
+  padding: clamp(18px,4vw,34px);
+  box-shadow: 0 0 55px #17352122;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg,transparent,var(--green),transparent);
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.kicker {
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: clamp(22px,5vw,38px);
+  letter-spacing: clamp(1px,1vw,5px);
+  margin: 0 0 8px;
+  color: var(--green);
+  font-weight: 500;
+}
+
+.sub {
+  color: #7e9183;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.progress {
+  height: 3px;
+  background: #17231a;
+  margin: 0 0 23px;
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--green);
+  transition: width .5s;
+}
+
+.stage {
+  min-height: 370px;
+  display: flex;
+  flex-direction: column;
+}
+
+.date {
+  font-size: clamp(22px,5vw,34px);
+  color: var(--green);
+  letter-spacing: 2px;
+  margin: 0 0 12px;
+}
+
+.image-wrap {
+  height: clamp(180px,42vw,300px);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #080b09;
+  border: 1px solid #293a2d;
+  margin-bottom: 17px;
+}
+
+.image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(.35) contrast(1.12) brightness(.75);
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity .8s, transform 3s;
+}
+
+.image-wrap img.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.image-wrap:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg,#050706a8,transparent 45%);
+  pointer-events: none;
+}
+
+.image-tag {
+  position: absolute;
+  left: 10px;
+  bottom: 9px;
+  z-index: 2;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #d6f9dc;
+  background: #050706b8;
+  padding: 6px 8px;
+}
+
+.message {
+  min-height: 54px;
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #d7e4d9;
+  border-left: 2px solid #3c6848;
+  padding-left: 12px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #607667;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-top: 15px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #52765b;
+  color: var(--green);
+  background: #0a150d;
+  padding: 13px 16px;
+  letter-spacing: 1px;
+  font-size: 11px;
+  transition: .2s;
+}
+
+button:hover, button:focus-visible {
+  background: #193323;
+  box-shadow: 0 0 20px #73ff9b22;
+  outline: none;
+}
+
+button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.hidden { display: none !important; }
+
+#rapid {
+  position: fixed;
+  inset: 0;
+  background: #020403;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.rapid-inner { width: min(560px,100%); }
+
+.rapid-label {
+  color: #69806e;
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+.rapid-date {
+  font-size: clamp(26px,8vw,58px);
+  color: var(--green);
+  margin: 22px 0;
+  animation: glitch .12s infinite alternate;
+}
+
+.rapid-bar {
+  height: 2px;
+  background: #17231a;
+  overflow: hidden;
+}
+
+.rapid-bar i {
+  display: block;
+  height: 100%;
+  background: var(--green);
+  width: 0;
+}
+
+@keyframes glitch {
+  0% { transform: translateX(-1px); opacity: .82; }
+  100% { transform: translateX(1px); opacity: 1; }
+}
+
+#final {
+  position: fixed;
+  inset: 0;
+  background: #020303;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22px;
+}
+
+.final-box {
+  width: min(600px,100%);
+  border: 1px solid #3d1717;
+  padding: clamp(22px,6vw,48px);
+  box-shadow: 0 0 70px #ff000010;
+  animation: appear .7s both;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: scale(.97); filter: blur(4px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+.final-date {
+  font-size: clamp(24px,7vw,48px);
+  letter-spacing: 3px;
+  color: #e7eee8;
+}
+
+.error {
+  font-size: clamp(34px,10vw,70px);
+  color: var(--red);
+  letter-spacing: 7px;
+  margin: 28px 0 12px;
+  text-shadow: 0 0 22px #ff000033;
+}
+
+.final-text {
+  color: #bd7777;
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+.blink {
+  animation: blink 1s steps(2,start) infinite;
+}
+
+@keyframes blink { to { visibility: hidden; } }
+
+#restart {
+  margin-top: 28px;
+  border-color: #6a2929;
+  color: #ff8c8c;
+  background: #130606;
+}
+
+footer {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #35483a;
+  font-size: 9px;
+  letter-spacing: 2px;
+  z-index: 4;
+}
+
+@media(max-height:700px) {
+  .stage { min-height: 0; }
+  .image-wrap { height: 34vh; min-height: 140px; }
+  .sub { margin-bottom: 14px; }
+  .panel { padding: 18px; }
+  .message { min-height: 42px; }
+}
 </style>
 </head>
 
 <body>
+<div class="noise"></div>
+<div class="scanlines"></div>
+
 <header>
-  <span>OBSERVATORIO // ARCHIVO 09</span>
-  <span id="status">● CONECTADO</span>
+  <span>NOVA-WEB11 <b>// ARCHIVO</b></span>
+  <span>ESTADO: <b id="status">EN ESPERA</b></span>
 </header>
 
-<main>
-  <section class="intro">
-    <p class="muted">SISTEMA DE RECUPERACIÓN DE DATOS</p>
-    <h1>ARCHIVOS PERDIDOS</h1>
-    <p class="muted">Se encontraron registros fuera de secuencia.</p>
-    <button id="start">INICIAR RECUPERACIÓN</button>
-  </section>
+<main id="main">
+<section class="panel">
+  <div class="kicker">SISTEMA DE RECUPERACIÓN // TERMINAL 09</div>
+  <h1>ARCHIVO DE MEMORIA</h1>
 
-  <div id="records" hidden>
-    <div class="line"></div>
-
-    <article class="record">
-      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=85" alt="La Tierra vista desde el espacio">
-      <div class="info">
-        <div class="tag">REGISTRO 001 // VERIFICADO</div>
-        <div class="date">16/07/1969</div>
-        <p class="description">
-          Misión espacial registrada. Todos los datos parecen normales.
-          Sin embargo, el archivo contiene una señal recibida décadas después.
-        </p>
-      </div>
-    </article>
-
-    <article class="record">
-      <img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=85" alt="Bosque denso y oscuro">
-      <div class="info">
-        <div class="tag">REGISTRO 002 // INCONSISTENTE</div>
-        <div class="date">03/06/1924</div>
-        <p class="description">
-          Fotografía recuperada de un bosque. En el negativo aparece una
-          silueta que no coincide con ninguna especie conocida de la época.
-        </p>
-        <p class="muted">ANÁLISIS DE IMAGEN: INCOMPLETO</p>
-      </div>
-    </article>
-
-    <article class="record">
-      <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1000&q=85" alt="Paisaje remoto y extraño">
-      <div class="info">
-        <div class="tag">REGISTRO 003 // PROCEDENCIA DESCONOCIDA</div>
-        <div class="date">19/08/2087</div>
-        <p class="description">
-          Se detectó una cápsula de investigación en una zona sin
-          instalaciones humanas. El número de serie pertenece a un modelo
-          que todavía no ha sido diseñado.
-        </p>
-      </div>
-    </article>
-
-    <article class="record">
-      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=85" alt="Planeta visto desde el espacio">
-      <div class="info">
-        <div class="tag">REGISTRO 004 // SIN CLASIFICAR</div>
-        <div class="date">01/11/2026</div>
-        <p class="description">
-          Última transmisión recibida:
-          <br><br>
-          <span style="color:#bbb">«Vemos las luces. Pero no hay nadie abajo».</span>
-          <br><br>
-          La señal termina sin explicación.
-        </p>
-      </div>
-    </article>
-
-    <div class="line"></div>
-    <p class="muted">ÚLTIMO ARCHIVO DISPONIBLE...</p>
-    <button id="last">ABRIR REGISTRO FINAL</button>
+  <div class="sub">
+    Se han detectado registros fuera de secuencia.<br>
+    La reproducción puede contener datos corruptos.
   </div>
 
-  <footer>
-    <div class="line"></div>
-    ARCHIVO LOCAL // NOVA-WEB11<br>
-    ALGUNOS REGISTROS PUEDEN ESTAR CORRUPTOS.
-  </footer>
+  <div class="progress"><span id="progress"></span></div>
+
+  <div class="stage">
+    <div class="date" id="date">--/--/----</div>
+
+    <div class="image-wrap">
+      <img id="photo" alt="Registro recuperado">
+      <span class="image-tag" id="imageTag">ESPERANDO DATOS...</span>
+    </div>
+
+    <div class="message" id="message">
+      Pulsa INICIAR RECUPERACIÓN para reconstruir los registros.
+    </div>
+
+    <div class="meta">
+      <span id="record">REGISTRO 00 / 05</span>
+      <span id="integrity">INTEGRIDAD: DESCONOCIDA</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="start">▶ INICIAR RECUPERACIÓN</button>
+    <button id="next" class="hidden" disabled>
+      SIGUIENTE REGISTRO →
+    </button>
+  </div>
+</section>
 </main>
 
-<section id="ending">
-  <div class="tag">02/11/2026 // REGISTRO FINAL</div>
-  <div id="enddate">02 / 11 / 2026</div>
-  <div class="line" style="width:100%;max-width:400px"></div>
-  <div id="error">ERROR</div>
-  <h2>PLANETA NO ENCONTRADO</h2>
-  <p id="endnote">
-    COORDENADAS: NULAS<br>
-    SEÑAL DEL PLANETA: PERDIDA<br>
-    ESPERANDO RESPUESTA...
-  </p>
-  <p class="muted" style="font-size:10px">NO SE PUDO RESTABLECER LA CONEXIÓN.</p>
-</section>
+<footer>NO TODO LO QUE SE ARCHIVA DEBERÍA SER ENCONTRADO</footer>
+
+<div id="rapid" class="hidden">
+  <div class="rapid-inner">
+    <div class="rapid-label">RECUPERANDO ÍNDICE CRONOLÓGICO</div>
+    <div class="rapid-date" id="rapidDate">01/01/1900</div>
+    <div class="rapid-bar"><i id="rapidBar"></i></div>
+    <p class="rapid-label" id="rapidText">ESCANEANDO REGISTROS...</p>
+  </div>
+</div>
+
+<div id="final" class="hidden">
+  <div class="final-box">
+    <div class="kicker">ÚLTIMO REGISTRO // LOCALIZACIÓN SOLICITADA</div>
+    <div class="final-date">02/11/2026</div>
+    <div class="error">NO ENCONTRADA</div>
+
+    <div class="final-text">
+      PLANETA: <b>DESCONOCIDO</b><br>
+      COORDENADAS: <b>NULL / NULL / NULL</b><br>
+      ESTADO DEL ARCHIVO: <b>INCOMPLETO</b>
+    </div>
+
+    <button id="recover">↻ INTENTAR RECUPERAR</button>
+    <p class="final-text hidden" id="finalHint">
+      SOLICITUD RECIBIDA<span class="blink"> _</span>
+    </p>
+  </div>
+</div>
 
 <script>
-const start=document.getElementById("start");
-const records=document.getElementById("records");
-const last=document.getElementById("last");
-const ending=document.getElementById("ending");
-const status=document.getElementById("status");
+const records = [
+  {
+    date: "16/07/1969",
+    tag: "REGISTRO 001 // SEÑAL ORBITAL",
+    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=85",
+    text: "Se detectó una señal que no aparece en la transcripción oficial. La grabación contiene 4 segundos adicionales.",
+    integrity: "ARCHIVO ALTERADO"
+  },
+  {
+    date: "03/06/1924",
+    tag: "REGISTRO 002 // BOSQUE",
+    image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=85",
+    text: "La fotografía fue encontrada en una caja sellada. La figura del fondo no coincide con ninguna especie registrada en el catálogo.",
+    integrity: "ORIGEN DESCONOCIDO"
+  },
+  {
+    date: "21/10/1986",
+    tag: "REGISTRO 003 // FOTOGRAMA 08",
+    image: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1200&q=85",
+    text: "El reloj de la cámara avanzó 11 minutos mientras todo lo demás permanecía inmóvil. Nadie recuerda haber tomado esta imagen.",
+    integrity: "TIEMPO INCONSISTENTE"
+  },
+  {
+    date: "19/08/2087",
+    tag: "REGISTRO 004 // CÁPSULA",
+    image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=85",
+    text: "La cápsula fue recuperada sin tripulación. En su interior había tierra húmeda y una etiqueta con una fecha que todavía no había ocurrido.",
+    integrity: "ORIGEN FUTURO"
+  },
+  {
+    date: "01/11/2026",
+    tag: "REGISTRO 005 // ÚLTIMA TRANSMISIÓN",
+    image: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1200&q=85",
+    text: "Vemos las luces. Pero no hay nadie abajo. La señal se corta aquí.",
+    integrity: "SEÑAL INTERRUMPIDA"
+  }
+];
 
-start.addEventListener("click",()=>{
-  start.disabled=true;
-  start.textContent="RECUPERANDO...";
-  status.textContent="● LEYENDO DATOS";
-  records.hidden=false;
+const $ = id => document.getElementById(id);
+let index = -1;
+let audioCtx = null;
+let running = false;
 
-  const items=[...records.querySelectorAll(".record")];
-  items.forEach((item,i)=>{
-    item.style.opacity="0";
-    setTimeout(()=>{
-      item.style.transition="opacity 1s";
-      item.style.opacity="1";
-    },500+i*1100);
-  });
+function tone(freq=800, duration=.045, volume=.025) {
+  try {
+    audioCtx = audioCtx || new (
+      window.AudioContext || window.webkitAudioContext
+    )();
 
-  setTimeout(()=>{
-    start.textContent="ARCHIVOS RECUPERADOS";
-    status.textContent="● ANOMALÍA DETECTADA";
-  },items.length*1100+800);
+    if (audioCtx.state === "suspended") audioCtx.resume();
+
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+
+    o.type = "square";
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(volume, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(
+      .001, audioCtx.currentTime + duration
+    );
+
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + duration);
+  } catch(e) {}
+}
+
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function typeText(el, text, speed=24) {
+  el.textContent = "";
+
+  for (const ch of text) {
+    el.textContent += ch;
+
+    if (ch.trim()) {
+      tone(650 + Math.random() * 250, .018, .009);
+    }
+
+    await wait(speed);
+  }
+}
+
+async function intro() {
+  if (running) return;
+
+  running = true;
+  $("start").disabled = true;
+  $("status").textContent = "ESCANEANDO";
+  $("rapid").classList.remove("hidden");
+
+  const dates = [
+    "04/04/1891",
+    "16/07/1969",
+    "03/06/1924",
+    "21/10/1986",
+    "19/08/2087",
+    "01/11/2026",
+    "02/11/2026"
+  ];
+
+  for (let i = 0; i < 42; i++) {
+    $("rapidDate").textContent =
+      dates[Math.floor(Math.random() * dates.length)];
+
+    $("rapidBar").style.width = ((i + 1) / 42 * 100) + "%";
+
+    tone(300 + Math.random() * 900, .025, .012);
+    await wait(42);
+  }
+
+  $("rapidDate").textContent = "ÍNDICE RESTAURADO";
+  $("rapidText").textContent = "SELECCIONANDO PRIMER REGISTRO...";
+  tone(1000, .15, .03);
+
+  await wait(550);
+
+  $("rapid").classList.add("hidden");
+  running = false;
+
+  showRecord(0);
+}
+
+async function showRecord(i) {
+  index = i;
+  const r = records[i];
+
+  $("date").textContent = r.date;
+  $("imageTag").textContent = r.tag;
+  $("photo").classList.remove("loaded");
+  $("photo").src = r.image;
+
+  $("photo").onload = () => {
+    $("photo").classList.add("loaded");
+  };
+
+  $("photo").onerror = () => {
+    $("imageTag").textContent =
+      r.tag + " // IMAGEN EXTERNA NO DISPONIBLE";
+  };
+
+  $("record").textContent =
+    `REGISTRO ${String(i + 1).padStart(3, "0")} / 005`;
+
+  $("integrity").textContent = "ANALIZANDO...";
+  $("progress").style.width = ((i + 1) / 6 * 100) + "%";
+  $("status").textContent =
+    "REGISTRO " + String(i + 1).padStart(3, "0");
+
+  $("start").classList.add("hidden");
+  $("next").classList.remove("hidden");
+  $("next").disabled = true;
+
+  await typeText($("message"), r.text, 23);
+
+  $("integrity").textContent = r.integrity;
+  $("next").disabled = false;
+
+  $("next").textContent =
+    i === records.length - 1
+      ? "LOCALIZAR 02/11/2026 →"
+      : "SIGUIENTE REGISTRO →";
+}
+
+$("start").addEventListener("click", intro);
+
+$("next").addEventListener("click", async () => {
+  if (running || index < 0) return;
+
+  tone(500, .08, .03);
+
+  if (index < records.length - 1) {
+    await showRecord(index + 1);
+  } else {
+    showFinal();
+  }
 });
 
-last.addEventListener("click",()=>{
-  status.textContent="● CONEXIÓN PERDIDA";
-  ending.classList.add("show");
-  document.body.style.overflow="hidden";
+function showFinal() {
+  $("main").classList.add("hidden");
+  $("final").classList.remove("hidden");
+  $("status").textContent = "OBJETIVO NO ENCONTRADO";
+  tone(180, .5, .05);
+}
+
+$("recover").addEventListener("click", async () => {
+  $("recover").disabled = true;
+  $("finalHint").classList.remove("hidden");
+  $("recover").textContent = "RECUPERANDO...";
+
+  tone(100, .25, .05);
+  await wait(900);
+
+  $("finalHint").innerHTML =
+    "ERROR 0x00002026<br>EL PLANETA NO RESPONDE" +
+    "<span class='blink'> _</span>";
+
+  $("recover").textContent = "ERROR";
+  $("recover").style.borderColor = "#ff4242";
+  $("recover").style.color = "#ff4242";
+
+  document.body.style.background = "#120000";
+  $("final").style.background = "#100000";
+
+  $("final").querySelector(".final-box").style.borderColor =
+    "#ff2424";
+
+  $("final").querySelector(".error").textContent = "ERROR";
+
+  tone(75, .8, .07);
 });
 </script>
 </body>
