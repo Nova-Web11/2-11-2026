@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050505">
+<title>ARCHIVO // 02-11-2026</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#050505;color:#ddd;
+  font-family:monospace;overflow-x:hidden;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(
+    transparent 0px,transparent 3px,
+    #ffffff08 4px
+  );z-index:5;
+}
+header{
+  padding:18px;border-bottom:1px solid #292929;
+  color:#777;font-size:11px;letter-spacing:2px;
+  display:flex;justify-content:space-between;
+}
+#status{color:#a33}
+main{max-width:700px;margin:auto;padding:25px 18px 80px}
+h1{font-size:clamp(27px,7vw,46px);letter-spacing:2px}
+.muted{color:#666}
+.intro{padding:40px 0;text-align:center}
+.line{height:1px;background:#292929;margin:24px 0}
+.record{
+  border:1px solid #252525;margin:25px 0;
+  background:#090909;animation:appear .8s ease both;
+}
+.record img{
+  display:block;width:100%;height:220px;
+  object-fit:cover;filter:grayscale(.55) contrast(1.15);
+}
+.info{padding:18px}
+.tag{color:#a33;font-size:10px;letter-spacing:2px}
+.date{font-size:23px;margin:12px 0}
+.description{color:#888;line-height:1.7;font-size:13px}
+footer{color:#444;font-size:10px;line-height:2}
+#ending{
+  display:none;position:fixed;inset:0;background:#000;
+  z-index:10;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;padding:25px;
+}
+#ending.show{display:flex;animation:flash .4s}
+#error{font-size:clamp(27px,8vw,52px);color:#e5e5e5;
+  margin:20px 0;animation:glitch 1s infinite}
+#enddate{font-size:20px;letter-spacing:4px}
+#endnote{color:#8d2929;font-size:11px;line-height:2}
+button{
+  background:#080808;color:#888;border:1px solid #444;
+  padding:14px 18px;font-family:monospace;cursor:pointer;
+}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes glitch{
+  0%,90%,100%{transform:translateX(0)}
+  92%{transform:translateX(3px)}
+  94%{transform:translateX(-4px)}
+  96%{transform:translateX(2px)}
+}
+@keyframes flash{0%{opacity:0}40%{opacity:.3}100%{opacity:1}}
+</style>
+</head>
+
+<body>
+<header>
+  <span>OBSERVATORIO // ARCHIVO 09</span>
+  <span id="status">● CONECTADO</span>
+</header>
+
+<main>
+  <section class="intro">
+    <p class="muted">SISTEMA DE RECUPERACIÓN DE DATOS</p>
+    <h1>ARCHIVOS PERDIDOS</h1>
+    <p class="muted">Se encontraron registros fuera de secuencia.</p>
+    <button id="start">INICIAR RECUPERACIÓN</button>
+  </section>
+
+  <div id="records" hidden>
+    <div class="line"></div>
+
+    <article class="record">
+      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=85" alt="La Tierra vista desde el espacio">
+      <div class="info">
+        <div class="tag">REGISTRO 001 // VERIFICADO</div>
+        <div class="date">16/07/1969</div>
+        <p class="description">
+          Misión espacial registrada. Todos los datos parecen normales.
+          Sin embargo, el archivo contiene una señal recibida décadas después.
+        </p>
+      </div>
+    </article>
+
+    <article class="record">
+      <img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=85" alt="Bosque denso y oscuro">
+      <div class="info">
+        <div class="tag">REGISTRO 002 // INCONSISTENTE</div>
+        <div class="date">03/06/1924</div>
+        <p class="description">
+          Fotografía recuperada de un bosque. En el negativo aparece una
+          silueta que no coincide con ninguna especie conocida de la época.
+        </p>
+        <p class="muted">ANÁLISIS DE IMAGEN: INCOMPLETO</p>
+      </div>
+    </article>
+
+    <article class="record">
+      <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1000&q=85" alt="Paisaje remoto y extraño">
+      <div class="info">
+        <div class="tag">REGISTRO 003 // PROCEDENCIA DESCONOCIDA</div>
+        <div class="date">19/08/2087</div>
+        <p class="description">
+          Se detectó una cápsula de investigación en una zona sin
+          instalaciones humanas. El número de serie pertenece a un modelo
+          que todavía no ha sido diseñado.
+        </p>
+      </div>
+    </article>
+
+    <article class="record">
+      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=85" alt="Planeta visto desde el espacio">
+      <div class="info">
+        <div class="tag">REGISTRO 004 // SIN CLASIFICAR</div>
+        <div class="date">01/11/2026</div>
+        <p class="description">
+          Última transmisión recibida:
+          <br><br>
+          <span style="color:#bbb">«Vemos las luces. Pero no hay nadie abajo».</span>
+          <br><br>
+          La señal termina sin explicación.
+        </p>
+      </div>
+    </article>
+
+    <div class="line"></div>
+    <p class="muted">ÚLTIMO ARCHIVO DISPONIBLE...</p>
+    <button id="last">ABRIR REGISTRO FINAL</button>
+  </div>
+
+  <footer>
+    <div class="line"></div>
+    ARCHIVO LOCAL // NOVA-WEB11<br>
+    ALGUNOS REGISTROS PUEDEN ESTAR CORRUPTOS.
+  </footer>
+</main>
+
+<section id="ending">
+  <div class="tag">02/11/2026 // REGISTRO FINAL</div>
+  <div id="enddate">02 / 11 / 2026</div>
+  <div class="line" style="width:100%;max-width:400px"></div>
+  <div id="error">ERROR</div>
+  <h2>PLANETA NO ENCONTRADO</h2>
+  <p id="endnote">
+    COORDENADAS: NULAS<br>
+    SEÑAL DEL PLANETA: PERDIDA<br>
+    ESPERANDO RESPUESTA...
+  </p>
+  <p class="muted" style="font-size:10px">NO SE PUDO RESTABLECER LA CONEXIÓN.</p>
+</section>
+
+<script>
+const start=document.getElementById("start");
+const records=document.getElementById("records");
+const last=document.getElementById("last");
+const ending=document.getElementById("ending");
+const status=document.getElementById("status");
+
+start.addEventListener("click",()=>{
+  start.disabled=true;
+  start.textContent="RECUPERANDO...";
+  status.textContent="● LEYENDO DATOS";
+  records.hidden=false;
+
+  const items=[...records.querySelectorAll(".record")];
+  items.forEach((item,i)=>{
+    item.style.opacity="0";
+    setTimeout(()=>{
+      item.style.transition="opacity 1s";
+      item.style.opacity="1";
+    },500+i*1100);
+  });
+
+  setTimeout(()=>{
+    start.textContent="ARCHIVOS RECUPERADOS";
+    status.textContent="● ANOMALÍA DETECTADA";
+  },items.length*1100+800);
+});
+
+last.addEventListener("click",()=>{
+  status.textContent="● CONEXIÓN PERDIDA";
+  ending.classList.add("show");
+  document.body.style.overflow="hidden";
+});
+</script>
+</body>
+</html>
