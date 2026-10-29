@@ -3,530 +3,294 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#050000">
-<title>NV-021126 // ARCHIVO PERDIDO</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050607">
+<title>ARCHIVO // 02-11-2026</title>
 <style>
-:root {
-  --red: #ff2020;
-  --dark: #070000;
-  --dim: #873030;
-  --green: #b9ffb9;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 12px;
-  background: var(--dark);
-  color: #ddd;
-  font-family: "Courier New", monospace;
-}
-
-.scanlines, .vignette, .noise {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-.scanlines {
-  z-index: 5;
-  opacity: .35;
-  background: repeating-linear-gradient(
-    transparent 0 2px,
-    #000 3px 4px
-  );
-}
-
-.vignette {
-  z-index: 4;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 15%,
-    #000 110%
-  );
-}
-
-.noise {
-  z-index: 3;
-  opacity: .06;
-  background-image: repeating-radial-gradient(
-    circle at 20% 30%,
-    #fff 0 1px,
-    transparent 1px 4px
-  );
-  background-size: 9px 11px;
-  animation: noise .2s steps(2) infinite;
-}
-
-.container {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 720px;
-  padding: clamp(20px, 5vw, 40px);
-  background: #0b0000;
-  border: 1px solid #500000;
-  box-shadow: 0 0 35px #65000022;
-}
-
-.topline {
-  color: var(--red);
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin-bottom: 28px;
-  animation: flicker 3s infinite;
-}
-
-h1 {
-  color: #eee;
-  font-size: clamp(27px, 7vw, 53px);
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-  text-shadow: 2px 0 red, -2px 0 #520000;
-  animation: glitch 4s infinite;
-}
-
-.subtitle {
-  color: #a34b4b;
-  font-size: 12px;
-  letter-spacing: 3px;
-  margin-top: 12px;
-}
-
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #800000, transparent);
-  margin: 28px 0;
-}
-
-.console {
-  min-height: 170px;
-  padding: 15px;
-  border: 1px solid #350000;
-  background: #050000;
-  text-align: left;
-}
-
-.console-title {
-  color: var(--red);
-  font-size: 11px;
-  margin-bottom: 15px;
-}
-
-.log {
-  font-size: 12px;
-  line-height: 2;
-  overflow-wrap: anywhere;
-  color: #a5a5a5;
-}
-
-.log .warning {
-  color: #ff3434;
-}
-
-.log .success {
-  color: var(--green);
-}
-
-.progress-wrap {
-  margin-top: 20px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  color: #a34b4b;
-  font-size: 10px;
-  margin-bottom: 8px;
-}
-
-.progress-track {
-  height: 8px;
-  border: 1px solid #510000;
-  background: #120000;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: var(--red);
-  box-shadow: 0 0 12px red;
-  transition: width .3s linear;
-}
-
-.timer-section {
-  display: none;
-  opacity: 0;
-  margin-top: 25px;
-}
-
-.timer-section.revealed {
-  display: block;
-  animation: reveal 1.5s forwards;
-}
-
-.timer-heading {
-  color: var(--red);
-  font-size: 12px;
-  letter-spacing: 3px;
-  margin-bottom: 20px;
-  animation: flicker 2s infinite;
-}
-
-.timer {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(5px, 2vw, 13px);
-}
-
-.unit {
-  min-width: 0;
-  padding: clamp(10px, 3vw, 18px) 2px;
-  background: linear-gradient(#180000, #080000);
-  border: 1px solid #460000;
-}
-
-.number {
-  display: block;
-  color: var(--red);
-  font-size: clamp(22px, 6.5vw, 48px);
-  font-weight: bold;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 12px #ff000066;
-}
-
-.label {
-  display: block;
-  color: #986666;
-  font-size: clamp(8px, 2vw, 10px);
-  margin-top: 9px;
-  overflow-wrap: anywhere;
-}
-
-.message {
-  margin-top: 22px;
-  font-size: 11px;
-  line-height: 2;
-  color: #b5a0a0;
-  overflow-wrap: anywhere;
-}
-
-.red {
-  color: var(--red);
-}
-
-.footer {
-  color: #634040;
-  font-size: 10px;
-  line-height: 2;
-  overflow-wrap: anywhere;
-}
-
-body.finished .number {
-  animation: flicker 2s infinite;
-}
-
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes glitch {
-  0%, 91%, 94%, 100% { transform: translate(0); }
-  92% { transform: translate(2px, -1px); }
-  93% { transform: translate(-2px, 1px); }
-}
-
-@keyframes flicker {
-  0%, 18%, 22%, 62%, 64%, 100% { opacity: 1; }
-  20%, 63% { opacity: .35; }
-}
-
-@keyframes noise {
-  0% { transform: translate(0,0); }
-  50% { transform: translate(2%,-1%); }
-  100% { transform: translate(-1%,2%); }
-}
-
-@media (max-width: 360px) {
-  .container { padding: 18px 8px; }
-  .timer { gap: 4px; }
-  .label { letter-spacing: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; }
-}
+:root{--g:#b8ffca;--d:#718879;--r:#ff3838}
+*{box-sizing:border-box}
+body{margin:0;background:#050706;color:#e6f0e8;font-family:ui-monospace,Consolas,monospace;min-height:100vh}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff06 4px)}
+header{padding:14px 16px;border-bottom:1px solid #26372b;color:var(--d);font-size:11px;letter-spacing:1.5px;display:flex;justify-content:space-between;gap:10px}
+header b{color:var(--g);font-weight:400}
+main{min-height:calc(100vh - 75px);display:grid;place-items:center;padding:18px 12px 40px}
+.panel{width:min(720px,100%);border:1px solid #304637;background:linear-gradient(145deg,#0b110d,#050706);padding:clamp(16px,4vw,30px);box-shadow:0 0 55px #16352030}
+.kicker{font-size:10px;letter-spacing:2px;color:var(--d);margin-bottom:12px}
+h1{font-size:clamp(24px,6vw,38px);font-weight:500;letter-spacing:2px;color:var(--g);margin:0 0 10px}
+.sub{font-size:12px;color:#829386;line-height:1.7;margin-bottom:18px}
+.track{height:3px;background:#1b281f;margin-bottom:18px}
+.track span{display:block;height:100%;width:0;background:var(--g);transition:width .4s}
+.date{font-size:clamp(24px,7vw,36px);color:var(--g);letter-spacing:2px;margin:8px 0 12px}
+.photo{height:clamp(190px,48vw,320px);background:#090d0a;border:1px solid #293a2d;position:relative;overflow:hidden;margin-bottom:16px}
+.photo img{width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);filter:grayscale(.25) brightness(.78);transition:opacity .7s,transform 2.5s}
+.photo img.show{opacity:1;transform:scale(1)}
+.tag{position:absolute;bottom:9px;left:9px;background:#030604cc;padding:7px;font-size:10px;letter-spacing:1px;color:#d6f9dc}
+.msg{min-height:72px;border-left:2px solid #4b8058;padding:5px 0 5px 12px;font-size:13px;line-height:1.8;white-space:pre-wrap;color:#dbe8de}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#637969;font-size:10px;margin-top:13px}
+button{background:#0b180f;border:1px solid #52765b;color:var(--g);padding:13px 15px;font:inherit;font-size:11px;letter-spacing:1px;cursor:pointer;margin:18px 8px 0 0}
+button:disabled{opacity:.5}
+#start{font-size:12px}
+.small{font-size:10px;color:#5e7564;line-height:1.6;margin-top:12px}
+#ending{position:fixed;inset:0;background:#030404;z-index:10;display:none;align-items:center;justify-content:center;text-align:center;padding:22px;overflow-y:auto}
+.endbox{width:min(600px,100%);border:1px solid #572020;padding:30px 18px;animation:appear .6s both;margin:auto}
+@keyframes appear{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.enddate{font-size:clamp(26px,8vw,48px);letter-spacing:2px}
+.err{font-size:clamp(36px,11vw,68px);color:var(--r);margin:26px 0 12px;letter-spacing:4px}
+.endtext{color:#c37b7b;font-size:12px;line-height:1.9}
+#retry{border-color:#52765b;color:var(--g);background:#0b180f}
+#countdown{display:none;margin-top:24px;border-top:1px solid #26372b;padding-top:20px;color:var(--g)}
+#countdown .cd-label{font-size:10px;letter-spacing:2px;color:var(--d);line-height:1.8}
+#countdown .cd-time{font-size:clamp(25px,7vw,42px);letter-spacing:2px;margin:12px 0;overflow-wrap:anywhere;text-shadow:0 0 14px #b8ffca35}
+#countdown .cd-note{font-size:10px;line-height:1.8;color:#829386}
 </style>
 </head>
-
 <body>
+<header>
+<span>NOVA-WEB11 <b>// ARCHIVO</b></span>
+<span>ESTADO: <b id="status">EN ESPERA</b></span>
+</header>
 
-<div class="noise"></div>
-<div class="vignette"></div>
-<div class="scanlines"></div>
-
-<main class="container">
-
-  <div class="topline" id="status">
-    ● SISTEMA DE RECUPERACIÓN NV-021126
-  </div>
-
-  <h1>ÚLTIMO ARCHIVO</h1>
-  <p class="subtitle">UNIDAD DE MEMORIA // 02-11-2026</p>
-
-  <div class="divider"></div>
-
-  <section class="console" aria-live="polite">
-    <div class="console-title">TERMINAL DE RECUPERACIÓN</div>
-    <div class="log" id="logs">
-      <div> &gt; Inicializando sistema...</div>
-    </div>
-
-    <div class="progress-wrap">
-      <div class="progress-info">
-        <span id="progress-label">ANALIZANDO DATOS</span>
-        <span id="progress-percent">0%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="timer-section" id="timer-section">
-    <div class="divider"></div>
-    <div class="timer-heading">/// ARCHIVO PARCIALMENTE RECUPERADO ///</div>
-
-    <div class="timer" aria-label="Cuenta regresiva">
-      <div class="unit">
-        <span class="number" id="days">---</span>
-        <span class="label">DÍAS</span>
-      </div>
-      <div class="unit">
-        <span class="number" id="hours">--</span>
-        <span class="label">HORAS</span>
-      </div>
-      <div class="unit">
-        <span class="number" id="minutes">--</span>
-        <span class="label">MINUTOS</span>
-      </div>
-      <div class="unit">
-        <span class="number" id="seconds">--</span>
-        <span class="label">SEGUNDOS</span>
-      </div>
-    </div>
-
-    <div class="message" id="message">
-      ESPERANDO SINCRONIZACIÓN...
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <footer class="footer">
-    ID: NV-021126<br>
-    ESTADO: ARCHIVO DAÑADO<br>
-    NO INTERRUMPAS LA TRANSMISIÓN
-  </footer>
-
+<main id="main">
+<section class="panel">
+<div class="kicker">SISTEMA DE RECUPERACIÓN // TERMINAL 09</div>
+<h1>ARCHIVO DE MEMORIA</h1>
+<div class="sub">Se detectaron registros fuera de secuencia.<br>Activa el audio y reconstruye los archivos perdidos.</div>
+<div class="track"><span id="progress"></span></div>
+<div class="date" id="date">02/11/2026</div>
+<div class="photo">
+<img id="img" alt="Imagen del registro">
+<span class="tag" id="tag">ESPERANDO INICIO...</span>
+</div>
+<div class="msg" id="msg">Pulsa iniciar. Los archivos aparecerán automáticamente, uno por uno.</div>
+<div class="meta">
+<span id="count">REGISTRO 00 / 05</span>
+<span id="integrity">AUDIO: LISTO PARA ACTIVAR</span>
+</div>
+<button id="start">▶ INICIAR RECUPERACIÓN + AUDIO</button>
+<button id="sound" hidden>ACTIVAR SONIDO</button>
+<div class="small">Recomendado: sube el volumen del teléfono. El sonido se activa al tocar el botón de inicio.</div>
+</section>
 </main>
 
+<div id="ending">
+<div class="endbox">
+<div class="kicker">ÚLTIMO REGISTRO // LOCALIZACIÓN SOLICITADA</div>
+<div class="enddate">02/11/2026</div>
+<div class="err" id="endTitle">NO ENCONTRADA</div>
+<div class="endtext">
+PLANETA: DESCONOCIDO<br>
+COORDENADAS: NULL / NULL / NULL<br>
+ESTADO DEL ARCHIVO: INCOMPLETO
+</div>
+<button id="retry">↻ INTENTAR RECUPERAR</button>
+<div class="endtext" id="endMsg"></div>
+
+<div id="countdown">
+<div class="cd-label">ÍNDICE CRONOLÓGICO // TIEMPO LOCAL</div>
+<div class="cd-time" id="cdTime">---d --:--:--</div>
+<div class="cd-note" id="cdNote">
+FECHA OBJETIVO: 02/11/2026 00:00:00<br>
+FUENTE: RELOJ DEL DISPOSITIVO
+</div>
+</div>
+</div>
+</div>
+
 <script>
-(() => {
-  "use strict";
+const records=[
+{
+date:"16/07/1969",
+tag:"REGISTRO 001 // SEÑAL ORBITAL",
+url:"https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=85",
+text:"Se detectó una señal que no aparece en la transcripción oficial. La grabación contiene cuatro segundos adicionales.",
+integrity:"ARCHIVO ALTERADO"
+},
+{
+date:"03/06/1924",
+tag:"REGISTRO 002 // BOSQUE",
+url:"https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=85",
+text:"Esta fotografía fue encontrada en una caja sellada. La figura del fondo no coincide con ninguna especie del catálogo.",
+integrity:"ORIGEN DESCONOCIDO"
+},
+{
+date:"21/10/1986",
+tag:"REGISTRO 003 // FOTOGRAMA 08",
+url:"https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1200&q=85",
+text:"El reloj de la cámara avanzó once minutos mientras todo lo demás permanecía inmóvil. Nadie recuerda haber tomado esta imagen.",
+integrity:"TIEMPO INCONSISTENTE"
+},
+{
+date:"19/08/2087",
+tag:"REGISTRO 004 // CÁPSULA",
+url:"https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=85",
+text:"La cápsula fue recuperada sin tripulación. En su interior había tierra húmeda y una etiqueta con una fecha que todavía no había ocurrido.",
+integrity:"ORIGEN FUTURO"
+},
+{
+date:"01/11/2026",
+tag:"REGISTRO 005 // ÚLTIMA TRANSMISIÓN",
+url:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1200&q=85",
+text:"Vemos las luces. Pero no hay nadie abajo. La señal se corta aquí.",
+integrity:"SEÑAL INTERRUMPIDA"
+}
+];
 
-  // 2 de noviembre de 2026, 00:00 en UTC-6.
-  const TARGET = Date.UTC(2026, 10, 2, 6, 0, 0);
+const $=id=>document.getElementById(id);
+let ctx=null,master=null,active=false;
+let countdownInterval=null;
 
-  const TIME_API =
-    "https://worldtimeapi.org/api/timezone/America/Mexico_City";
+function initAudio(){
+ const AC=window.AudioContext||window.webkitAudioContext;
+ if(!AC)return false;
+ if(!ctx){
+  ctx=new AC();
+  master=ctx.createGain();
+  master.gain.value=.7;
+  master.connect(ctx.destination);
+ }
+ if(ctx.state==="suspended")ctx.resume();
+ return true;
+}
 
-  const $ = id => document.getElementById(id);
+function beep(freq=700,dur=.09,vol=.12,type="sine"){
+ if(!ctx||!master)return;
+ const o=ctx.createOscillator(),g=ctx.createGain();
+ o.type=type;
+ o.frequency.setValueAtTime(freq,ctx.currentTime);
+ g.gain.setValueAtTime(.001,ctx.currentTime);
+ g.gain.linearRampToValueAtTime(vol,ctx.currentTime+.012);
+ g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+dur);
+ o.connect(g);
+ g.connect(master);
+ o.start();
+ o.stop(ctx.currentTime+dur+.02);
+}
 
-  const status = $("status");
-  const logs = $("logs");
-  const bar = $("progress-bar");
-  const percent = $("progress-percent");
-  const progressLabel = $("progress-label");
-  const timerSection = $("timer-section");
-  const message = $("message");
+function wait(ms){
+ return new Promise(resolve=>setTimeout(resolve,ms));
+}
 
-  let serverTime = 0;
-  let performanceAtSync = 0;
-  let synchronized = false;
-  let syncing = false;
-  let finished = false;
-  let recoveryDone = false;
-
-  function addLog(text, type = "") {
-    const line = document.createElement("div");
-    line.textContent = "> " + text;
-    if (type) line.className = type;
-    logs.appendChild(line);
-
-    // Mantener la terminal compacta.
-    while (logs.children.length > 6) {
-      logs.removeChild(logs.firstChild);
-    }
+async function typeMessage(text){
+ $("msg").textContent="";
+ for(const ch of text){
+  $("msg").textContent+=ch;
+  if(ch!==" "&&ch!=="\n"){
+   beep(650+Math.random()*260,.035,.035,"square");
   }
+  await wait(25);
+ }
+}
 
-  // Recuperación ficticia para la experiencia narrativa del ARG.
-  // No se leen archivos reales del visitante.
-  const recoverySteps = [
-    { at: 800, text: "Buscando el último archivo...", pct: 12 },
-    { at: 2100, text: "Unidad de memoria detectada.", pct: 28 },
-    { at: 3500, text: "Leyendo sectores dañados...", pct: 47 },
-    { at: 4900, text: "Error: fragmentos corruptos.", pct: 63, warning: true },
-    { at: 6200, text: "Reconstruyendo datos parciales...", pct: 81 },
-    { at: 7700, text: "Archivo parcialmente recuperado.", pct: 100, success: true }
-  ];
+async function showRecord(i){
+ const r=records[i];
 
-  function runRecovery() {
-    addLog("Inicializando protocolo de recuperación...");
+ $("date").textContent=r.date;
+ $("tag").textContent=r.tag;
+ $("count").textContent=`REGISTRO ${String(i+1).padStart(3,"0")} / 005`;
+ $("integrity").textContent="CARGANDO ARCHIVO...";
+ $("progress").style.width=((i+1)/6*100)+"%";
+ $("status").textContent="LEYENDO "+String(i+1).padStart(3,"0");
 
-    recoverySteps.forEach(step => {
-      setTimeout(() => {
-        addLog(
-          step.text,
-          step.warning ? "warning" :
-          step.success ? "success" : ""
-        );
+ $("img").classList.remove("show");
+ $("img").onload=()=>{
+  $("img").classList.add("show");
+  beep(520,.16,.09,"sine");
+ };
+ $("img").onerror=()=>{
+  $("tag").textContent=r.tag+" // ERROR DE IMAGEN";
+ };
+ $("img").src=r.url;
 
-        bar.style.width = step.pct + "%";
-        percent.textContent = step.pct + "%";
-        progressLabel.textContent =
-          step.pct < 100 ? "RECUPERANDO DATOS" : "PROCESO FINALIZADO";
+ if($("img").complete&&$("img").naturalWidth>0){
+  $("img").classList.add("show");
+  beep(520,.16,.09,"sine");
+ }
 
-        if (step.success) {
-          recoveryDone = true;
-          status.textContent = "● ARCHIVO PARCIALMENTE RECUPERADO";
+ await wait(650);
+ beep(880,.11,.1,"sine");
+ await typeMessage(r.text);
+ $("integrity").textContent=r.integrity;
+ await wait(950);
+}
 
-          timerSection.classList.add("revealed");
+async function run(){
+ if(active)return;
+ active=true;
 
-          message.innerHTML =
-            '<span class="red">CONTENIDO RECUPERADO.</span><br>' +
-            'SINCRONIZANDO RELOJ EXTERNO...';
+ $("start").disabled=true;
+ $("start").textContent="RECUPERANDO...";
 
-          // Si ya llegó la hora, el render lo mostrará.
-          render();
-        }
-      }, step.at);
-    });
+ if(!initAudio()){
+  $("integrity").textContent="AUDIO NO DISPONIBLE EN ESTE NAVEGADOR";
+ }else{
+  beep(440,.12,.12);
+  await wait(130);
+  beep(660,.12,.12);
+ }
+
+ for(let i=0;i<records.length;i++){
+  await showRecord(i);
+ }
+
+ $("status").textContent="OBJETIVO NO ENCONTRADO";
+ await wait(450);
+ $("main").style.display="none";
+ $("ending").style.display="flex";
+ beep(190,.55,.15,"sawtooth");
+}
+
+$("start").addEventListener("click",run);
+
+$("sound").addEventListener("click",()=>{
+ initAudio();
+ beep(700,.2,.12);
+ $("integrity").textContent="AUDIO ACTIVADO";
+});
+
+/* CONTADOR: utiliza la fecha y hora local del dispositivo */
+function updateCountdown(){
+ const target=new Date(2026,10,2,0,0,0,0).getTime();
+ const remaining=Math.max(0,target-Date.now());
+
+ const days=Math.floor(remaining/86400000);
+ const hours=Math.floor((remaining%86400000)/3600000);
+ const minutes=Math.floor((remaining%3600000)/60000);
+ const seconds=Math.floor((remaining%60000)/1000);
+
+ $("cdTime").textContent=
+  `${String(days).padStart(3,"0")}d ${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+
+ if(remaining<=0){
+  $("cdTime").textContent="000d 00:00:00";
+  $("cdNote").innerHTML=
+   "EVENTO ALCANZADO<br>EL REGISTRO HA LLEGADO A SU FECHA OBJETIVO";
+
+  if(countdownInterval){
+   clearInterval(countdownInterval);
+   countdownInterval=null;
   }
+ }
+}
 
-  async function syncTime() {
-    if (syncing || finished) return;
-    syncing = true;
+$("retry").addEventListener("click",async()=>{
+ initAudio();
+ $("retry").disabled=true;
+ $("retry").textContent="RECUPERANDO...";
 
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
+ beep(140,.35,.16,"sawtooth");
+ await wait(1000);
 
-      let response;
-      try {
-        response = await fetch(TIME_API, {
-          cache: "no-store",
-          signal: controller.signal
-        });
-      } finally {
-        clearTimeout(timeout);
-      }
+ $("endTitle").textContent="ERROR";
+ $("endMsg").innerHTML="ERROR 0x00002026<br>ÍNDICE TEMPORAL RESTAURADO";
+ $("ending").style.background="#030604";
+ beep(75,.8,.2,"sawtooth");
 
-      if (!response.ok) {
-        throw new Error("Servicio de hora no disponible");
-      }
+ $("retry").style.display="none";
+ $("countdown").style.display="block";
 
-      const data = await response.json();
-      const timestamp = Number(data.unixtime);
-
-      if (!Number.isFinite(timestamp) || timestamp <= 0) {
-        throw new Error("Respuesta de hora no válida");
-      }
-
-      serverTime = timestamp * 1000;
-      performanceAtSync = performance.now();
-      synchronized = true;
-
-      document.body.classList.remove("error");
-      status.textContent = recoveryDone
-        ? "● ARCHIVO RECUPERADO // RELOJ SINCRONIZADO"
-        : "● RECUPERACIÓN EN CURSO // RELOJ SINCRONIZADO";
-
-      if (recoveryDone) render();
-
-    } catch (error) {
-      synchronized = false;
-      status.textContent = "● ERROR DE SINCRONIZACIÓN";
-
-      if (recoveryDone) {
-        message.textContent =
-          "NO SE PUDO VERIFICAR LA HORA EXTERNA. REINTENTANDO...";
-      }
-
-      ["days", "hours", "minutes", "seconds"].forEach(id => {
-        $(id).textContent = id === "days" ? "---" : "--";
-      });
-
-    } finally {
-      syncing = false;
-    }
-  }
-
-  function render() {
-    if (!recoveryDone || !synchronized || finished) return;
-
-    const now = serverTime + (performance.now() - performanceAtSync);
-    const remaining = Math.max(0, TARGET - now);
-
-    $("days").textContent =
-      String(Math.floor(remaining / 86400000)).padStart(3, "0");
-
-    $("hours").textContent =
-      String(Math.floor((remaining % 86400000) / 3600000)).padStart(2, "0");
-
-    $("minutes").textContent =
-      String(Math.floor((remaining % 3600000) / 60000)).padStart(2, "0");
-
-    $("seconds").textContent =
-      String(Math.floor((remaining % 60000) / 1000)).padStart(2, "0");
-
-    if (remaining <= 0) {
-      finished = true;
-
-      $("days").textContent = "000";
-      $("hours").textContent = "00";
-      $("minutes").textContent = "00";
-      $("seconds").textContent = "00";
-
-      document.body.classList.add("finished");
-      status.textContent = "● EVENTO ALCANZADO";
-      message.textContent = "TRANSMISIÓN FINALIZADA.";
-    }
-  }
-
-  // El reloj puede sincronizarse mientras se simula la recuperación.
-  // El contador no se revela hasta finalizar dicha secuencia.
-  runRecovery();
-  syncTime();
-
-  setInterval(render, 1000);
-  setInterval(syncTime, 60000);
-})();
+ updateCountdown();
+ countdownInterval=setInterval(updateCountdown,1000);
+});
 </script>
-
 </body>
 </html>
